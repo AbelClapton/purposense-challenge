@@ -1,25 +1,26 @@
 'use client'
 
 import { useState, type KeyboardEvent } from 'react'
-import { useFormContext } from '@/app/contexts'
+import { useForm } from '@/app/contexts'
 import { Card, CardTitle, CardContent, Input, Tag } from '../ui'
 
 export const PeopleSection: React.FC = () => {
   const [value, setValue] = useState('')
-  const { formState, setFormState } = useFormContext()
+  const { formState, updateField } = useForm()
   const people = formState.people ?? []
 
+  // TODO: hook it up
   const addPeople = (value: string) => {
     if (people.some((p) => p.toLowerCase() === value.toLowerCase())) {
       return alert('This participant type has already been added.')
     }
 
-    setFormState({ ...formState, people: [...people, value] })
+    updateField('people', [...people, value])
     setValue('')
   }
 
   const popPeople = () => {
-    setFormState({ ...formState, people: people.slice(0, -1) })
+    updateField('people', people.slice(0, -1))
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -34,7 +35,10 @@ export const PeopleSection: React.FC = () => {
   }
 
   const handleRemovePeople = (value: string) => {
-    setFormState({ ...formState, people: people.filter((p) => p !== value) })
+    updateField(
+      'people',
+      people.filter((p) => p !== value),
+    )
   }
 
   return (

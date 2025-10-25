@@ -19,7 +19,7 @@ const Select: React.FC<SelectProps> = ({
       <select
         id={id}
         className={clsx(
-          'focus:border-accent focus:ring-accent border-border w-full rounded-md border bg-white px-3 py-2 text-sm transition-colors duration-200 focus:ring-2 focus:outline-none',
+          'focus:border-accent focus:ring-accent border-border hover:border-accent/70 w-full rounded-md border bg-white px-3 py-2 text-sm transition-colors duration-200 focus:ring-2 focus:outline-none',
           className,
         )}
         {...props}

@@ -62,7 +62,7 @@ const BaseCardInner = (
           <IconRender Icon={Icon} title={title} />
 
           <div>
-            <CardTitle className="text-accent text-lg font-bold">
+            <CardTitle className="text-accent text-lg! font-bold">
               {title}
             </CardTitle>
             {subtitle ? (
@@ -79,6 +79,7 @@ const BaseCardInner = (
 
         <CardFooter className="bg-accent flex flex-col items-center justify-center border-t-0 text-center">
           {expandable && (
+            // TODO: Opportunity for compound pattern
             <ExpandControl
               expanded={expanded}
               onToggleExpand={onToggleExpand}

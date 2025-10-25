@@ -33,7 +33,9 @@ export const Button: React.FC<ButtonProps> = ({
       : 'bg-accent text-white px-3 py-2'
 
   // When the button is icon-only we want a fully rounded square and tighter padding
-  const iconOnlyClasses = isIconOnly ? 'rounded-full p-2' : 'rounded-md'
+  const iconOnlyClasses = isIconOnly
+    ? 'rounded-full p-2 aspect-square'
+    : 'rounded-md'
 
   // If icon + text, align spacing — when icon is start, give right margin, else left margin
   const iconWrapperClass = isIconOnly ? '' : 'inline-flex items-center'

@@ -1,3 +1,5 @@
+'use client'
+
 import { AssumptionsSection } from './assumptions-section'
 import { Cards } from './cards'
 import { PeopleSection } from './people-section'
@@ -8,8 +10,8 @@ import { Form } from '../ui/form'
 
 export const TheoryOfChange = () => {
   const handleSubmit = async (data: FormState) => {
-    'use server'
     console.log('Form data:', JSON.stringify(data))
+    alert('Saved!')
   }
 
   return (

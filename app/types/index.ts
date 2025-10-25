@@ -1,5 +1,11 @@
 import { LucideProps } from 'lucide-react'
-import { FormEvent, ForwardRefExoticComponent, RefAttributes } from 'react'
+import {
+  DetailedHTMLProps,
+  FormEvent,
+  ForwardRefExoticComponent,
+  HTMLAttributes,
+  RefAttributes,
+} from 'react'
 import { Certainty } from '../constants'
 
 export type Assumption = {
@@ -16,19 +22,21 @@ export type FormState = {
   people?: string[]
   assumptions?: Assumption[]
   directOutcomes?: {
+    id: number
     outcome: string
-    suboutcomes: string[]
+    suboutcomes: { id: number; value: string }[]
   }[]
   indirectOutcomes?: {
+    id: number
     outcome: string
-    suboutcomes: string[]
   }[]
-  ultimateImpact?: string[]
+  ultimateImpact?: { id: number; description: string }[]
 }
 
 export type FormContextValue = {
   formState: FormState
-  updateField: (field: string, value: unknown) => void
+  isDirty: boolean
+  updateField: (field: keyof FormState, value: unknown) => void
   setFormState: (state: FormState) => void
   getFieldValue: (field: keyof FormState) => unknown
   resetForm: () => void
@@ -46,4 +54,9 @@ export type TypedFormContextValue<T extends FormState> = {
 // Icon type for Lucide icons
 export type Icon = ForwardRefExoticComponent<
   Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
+>
+
+export type DivProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
 >

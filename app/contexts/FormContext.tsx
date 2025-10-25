@@ -24,12 +24,22 @@ export const FormProvider: React.FC<FormProviderProps> = ({
   onSubmit,
 }) => {
   const [formState, setFormState] = useState<FormState>(initialValues)
+  const [isDirty, setIsDirty] = useState(false)
+
+  const checkIsDirty = (currentData: FormState) => {
+    return JSON.stringify(currentData) !== JSON.stringify(initialValues)
+  }
 
   const updateField = (field: string, value: unknown) => {
-    setFormState((prev) => ({
-      ...prev,
+    const newFormData = {
+      ...formState,
       [field]: value,
-    }))
+    }
+
+    setFormState(newFormData)
+
+    // Update dirty state
+    setIsDirty(checkIsDirty(newFormData))
   }
 
   const setFormStateWrapper = (state: FormState) => {
@@ -47,10 +57,12 @@ export const FormProvider: React.FC<FormProviderProps> = ({
     e.preventDefault()
 
     onSubmit?.(formState)
+    setIsDirty(false)
   }
 
   const value: FormContextValue = {
     formState,
+    isDirty,
     updateField,
     setFormState: setFormStateWrapper,
     getFieldValue,
@@ -61,11 +73,11 @@ export const FormProvider: React.FC<FormProviderProps> = ({
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>
 }
 
-export const useFormContext = (): FormContextValue => {
+export const useForm = (): FormContextValue => {
   const context = useContext(FormContext)
 
   if (context === undefined) {
-    throw new Error('useFormContext must be used within a FormProvider')
+    throw new Error('useForm must be used within a FormProvider')
   }
 
   return context

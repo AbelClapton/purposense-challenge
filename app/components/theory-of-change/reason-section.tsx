@@ -1,13 +1,13 @@
 'use client'
 
-import { useFormContext } from '@/app/contexts'
+import { useForm } from '@/app/contexts'
 import { Card, CardTitle, CardContent, TextArea } from '../ui'
 
 export const ReasonSection = () => {
-  const { formState, setFormState } = useFormContext()
+  const { formState, updateField } = useForm()
 
   const handleChange = (value: string) => {
-    setFormState({ ...formState, reason: value })
+    updateField('reason', value)
   }
 
   return (

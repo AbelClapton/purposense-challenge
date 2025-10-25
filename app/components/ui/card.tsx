@@ -47,7 +47,7 @@ const CardTitle: React.FC<CardTitleProps> = ({
   as: Tag = 'h3',
 }) => {
   return (
-    <Tag className={clsx('px-4 pt-4 pb-1 text-xl font-semibold', className)}>
+    <Tag className={clsx('px-4 pt-4 pb-1 text-sm font-semibold', className)}>
       {children}
     </Tag>
   )

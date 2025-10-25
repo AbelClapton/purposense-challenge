@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from './button'
 
 type TagProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLSpanElement>,
@@ -22,13 +23,9 @@ const Tag: React.FC<TagProps> = ({
     >
       {children}
       {removable && (
-        <button
-          type="button"
-          onClick={onRemove}
-          className="hover:bg-accent/70 focus:ring-accent ml-1.5 inline-flex h-4 w-4 cursor-pointer items-center justify-center rounded-full transition-colors duration-200 focus:ring-1 focus:outline-none"
-        >
+        <Button variant="text" onClick={onRemove} aria-label="Remove">
           ×
-        </button>
+        </Button>
       )}
     </span>
   )

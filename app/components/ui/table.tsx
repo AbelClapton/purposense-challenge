@@ -2,7 +2,15 @@
 
 // #region Imports
 import { Column, TableContextType, TableProps } from '@/app/types/table'
-import { ChevronLeft, ChevronRight, Edit2, Save, Trash2, X } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Edit2,
+  Plus,
+  Save,
+  Trash2,
+  X,
+} from 'lucide-react'
 import React, {
   createContext,
   useContext,
@@ -14,6 +22,7 @@ import React, {
 import { Button } from './button'
 import { Input } from './input'
 import { Select } from './select'
+import { Tooltip } from './tooltip'
 // #endregion
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -104,18 +113,20 @@ function Header<T>() {
 
   return (
     <div className="border-b border-gray-200 bg-gray-50 px-6 py-3">
-      <div className="flex items-center">
-        {columns.map((column, index) => (
-          <div
-            key={String(column.key)}
-            className={`text-sm font-semibold text-gray-900 ${
-              index === 0 ? 'flex-1' : 'flex-1'
-            }`}
-            style={column.width ? { width: column.width } : undefined}
-          >
-            {column.label}
-          </div>
-        ))}
+      <div className="flex flex-1 items-center">
+        <div className="flex flex-1 items-center">
+          {columns.map((column) => (
+            <div
+              key={String(column.key)}
+              className={`text-sm font-semibold text-gray-900 ${
+                column.width ? '' : 'flex-1 pl-4'
+              }`}
+              style={column.width ? { width: column.width } : undefined}
+            >
+              {column.label}
+            </div>
+          ))}
+        </div>
         <div className="w-24 text-right text-sm font-semibold text-gray-900">
           Actions
         </div>
@@ -246,13 +257,13 @@ function Row<T>({ row, rowIndex, isEditing }: RowProps<T>) {
   }
 
   return (
-    <div className="px-6 py-4 transition-colors hover:bg-gray-50">
+    <div className="hover:bg-accent/10 px-6 py-4 transition-colors">
       <div className="flex items-center justify-between">
         <div className="flex flex-1 items-center space-x-2">
           {columns.map((column, colIndex) => (
             <div
               key={String(column.key)}
-              className="flex-1"
+              className={column.width ? '' : 'flex-1'}
               style={column.width ? { width: column.width } : undefined}
             >
               {renderCellContent(column, colIndex === 0)}
@@ -263,39 +274,48 @@ function Row<T>({ row, rowIndex, isEditing }: RowProps<T>) {
         <div className="flex w-24 justify-end space-x-2">
           {isEditing ? (
             <>
-              <Button
-                onClick={handleSave}
-                variant="text"
-                className="text-green-600 hover:text-green-800"
-                title="Save"
-              >
-                <Save className="h-4 w-4" />
-              </Button>
-              <Button onClick={handleCancel} variant="text" title="Cancel">
-                <X className="h-4 w-4" />
-              </Button>
+              <Tooltip text="Save">
+                <Button
+                  onClick={handleSave}
+                  variant="text"
+                  className="text-green-600 hover:text-green-800"
+                  icon={<Save className="h-4 w-4" />}
+                  aria-label="Save"
+                />
+              </Tooltip>
+
+              <Tooltip text="Cancel">
+                <Button
+                  onClick={handleCancel}
+                  variant="text"
+                  aria-label="Cancel"
+                  icon={<X className="h-4 w-4" />}
+                />
+              </Tooltip>
             </>
           ) : (
             <>
-              <Button
-                variant="text"
-                onClick={() => {
-                  setTempData(row)
-                  startEditing(rowIndex)
-                }}
-                title="Edit"
-              >
-                <Edit2 className="h-4 w-4" />
-              </Button>
+              <Tooltip text="Edit">
+                <Button
+                  variant="text"
+                  onClick={() => {
+                    setTempData(row)
+                    startEditing(rowIndex)
+                  }}
+                  aria-label="Edit"
+                  icon={<Edit2 className="h-4 w-4" />}
+                />
+              </Tooltip>
 
-              <Button
-                onClick={() => removeRow(rowIndex)}
-                variant="text"
-                className="text-red-600 transition-colors hover:text-red-800"
-                title="Remove"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              <Tooltip text="Remove">
+                <Button
+                  onClick={() => removeRow(rowIndex)}
+                  variant="text"
+                  className="text-red-600 transition-colors hover:text-red-800"
+                  aria-label="Remove"
+                  icon={<Trash2 className="h-4 w-4" />}
+                />
+              </Tooltip>
             </>
           )}
         </div>
@@ -363,12 +383,14 @@ function AddRow<T>() {
   if (!isAdding) {
     return (
       <div className="border-t border-gray-200 bg-gray-50 px-6 py-4">
-        <button
+        <Button
+          variant="text"
           onClick={handleStartAdd}
-          className="w-full rounded-md border-2 border-dashed border-gray-300 py-2 text-center font-medium text-blue-600 transition-colors hover:border-blue-400 hover:text-blue-800"
+          className="h-12 w-full border-2! border-dashed!"
+          icon={<Plus className="h-4 w-4" />}
         >
-          + Add New Row
-        </button>
+          Add new row
+        </Button>
       </div>
     )
   }
@@ -410,13 +432,19 @@ function AddRow<T>() {
         </div>
 
         <div className="flex w-24 justify-end space-x-2">
-          <Button onClick={handleSave} variant="text" title="Save">
-            <Save className="h-4 w-4" />
-          </Button>
+          <Button
+            onClick={handleSave}
+            variant="text"
+            aria-label="Save"
+            icon={<Save className="h-4 w-4" />}
+          />
 
-          <Button variant="text" onClick={handleCancel} title="Cancel">
-            <X className="h-4 w-4" />
-          </Button>
+          <Button
+            variant="text"
+            onClick={handleCancel}
+            aria-label="Cancel"
+            icon={<X className="h-4 w-4" />}
+          />
         </div>
       </div>
     </div>
@@ -433,8 +461,8 @@ function Pagination<T>() {
 
   return (
     <div className="border-t border-gray-200 bg-gray-50 px-6 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col items-center justify-between sm:flex-row">
+        <div className="flex space-x-4 sm:flex-row">
           <span className="text-sm text-gray-700">
             Showing{' '}
             {data.length === 0
@@ -444,48 +472,52 @@ function Pagination<T>() {
           </span>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <label
-            htmlFor="rowsPerPage"
-            className="text-sm text-nowrap text-gray-700"
-          >
-            Rows per page
-          </label>
+        <div className="flex flex-col items-center gap-2 space-x-2 sm:flex-row">
+          <div className="flex items-center justify-center gap-2">
+            <label
+              htmlFor="rowsPerPage"
+              className="text-sm text-nowrap text-gray-700"
+            >
+              Rows per page
+            </label>
 
-          <Select
-            id="rowsPerPage"
-            value={rowsPerPage}
-            onChange={(e) => {
-              setRowsPerPage(Number(e.target.value))
-              setCurrentPage(1)
-            }}
-            options={[
-              { value: 5, label: '5' },
-              { value: 10, label: '10' },
-            ]}
-          />
+            <Select
+              id="rowsPerPage"
+              value={rowsPerPage}
+              onChange={(e) => {
+                setRowsPerPage(Number(e.target.value))
+                setCurrentPage(1)
+              }}
+              options={[
+                { value: 5, label: '5' },
+                { value: 10, label: '10' },
+              ]}
+            />
+          </div>
 
-          <Button
-            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-            disabled={currentPage === 1}
-            className="bg-gray-200 hover:bg-gray-100"
-          >
-            <ChevronLeft className="h-4 w-4 text-gray-700" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+              className="bg-gray-200 hover:bg-gray-100"
+              icon={<ChevronLeft className="h-4 w-4 text-gray-700" />}
+              aria-label="Previous page"
+            />
 
-          <span className="text-sm text-nowrap text-gray-700">
-            Page {currentPage} of {totalPages || 1}
-          </span>
+            <span className="text-sm text-nowrap text-gray-700">
+              Page {currentPage} of {totalPages || 1}
+            </span>
 
-          <Button
-            onClick={() =>
-              setCurrentPage(Math.min(totalPages, currentPage + 1))
-            }
-            disabled={currentPage === totalPages || totalPages === 0}
-            className="bg-gray-200 hover:bg-gray-100"
-          >
-            <ChevronRight className="h-4 w-4 text-gray-700" />
-          </Button>
+            <Button
+              onClick={() =>
+                setCurrentPage(Math.min(totalPages, currentPage + 1))
+              }
+              disabled={currentPage === totalPages || totalPages === 0}
+              className="bg-gray-200 hover:bg-gray-100"
+              icon={<ChevronRight className="h-4 w-4 text-gray-700" />}
+              aria-label="next-page"
+            />
+          </div>
         </div>
       </div>
     </div>

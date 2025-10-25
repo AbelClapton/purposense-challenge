@@ -5,12 +5,12 @@ import { type Assumption } from '@/app/types'
 import { Card, CardTitle, CardContent } from '../../ui'
 import { CertaintyLabel } from './certainty-label'
 import { CertaintySelect } from './certainty-select'
-import { useFormContext } from '@/app/contexts'
+import { useForm } from '@/app/contexts'
 import { Column } from '@/app/types/table'
 import Table from '../../ui/table'
 
 export const AssumptionsSection = () => {
-  const { formState, setFormState } = useFormContext()
+  const { formState, updateField } = useForm()
   const data = formState.assumptions ?? []
 
   const columns: Column<Assumption>[] = [
@@ -18,7 +18,7 @@ export const AssumptionsSection = () => {
       key: 'description',
       label: 'Description',
       editable: true,
-      width: '30%',
+      width: '75%',
     },
     {
       key: 'certainty',
@@ -34,18 +34,18 @@ export const AssumptionsSection = () => {
   const handleEdit = (rowIndex: number, newData: Assumption) => {
     const newDataArray = [...data]
     newDataArray[rowIndex] = newData
-    setFormState({ ...formState, assumptions: newDataArray })
+    updateField('assumptions', newDataArray)
   }
 
   const handleRemove = (rowIndex: number) => {
-    setFormState({
-      ...formState,
-      assumptions: data.filter((_, index) => index !== rowIndex),
-    })
+    updateField(
+      'assumptions',
+      data.filter((_, index) => index !== rowIndex),
+    )
   }
 
   const handleAdd = (newData: Assumption) => {
-    setFormState({ ...formState, assumptions: [...data, { ...newData }] })
+    updateField('assumptions', [...data, { ...newData }])
   }
 
   return (

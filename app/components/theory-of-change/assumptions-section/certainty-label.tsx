@@ -9,7 +9,9 @@ export const CertaintyLabel: React.FC<CertaintyLabelProps> = ({ value }) => {
   const level = certaintyLevels.find((level) => level.value === value)
 
   return (
-    <Tag style={{ color: level ? level.color : 'gray' }}>
+    <Tag
+      className={level?.classes ?? 'border-gray-200 bg-gray-50 text-gray-700'}
+    >
       {level?.label || 'Unknown'}
     </Tag>
   )
